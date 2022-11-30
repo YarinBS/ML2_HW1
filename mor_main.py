@@ -34,20 +34,8 @@ test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
                                           shuffle=False)
 
 
-# def one_hot(y):
-#     max_idx = torch.argmax(y, 0, keepdim=True)
-#     one_hot = torch.FloatTensor(y.shape)
-#     one_hot.zero_()
-#     one_hot.scatter_(0, max_idx, 1)
-#     return one_hot
-
 def relu(Z):
     return np.maximum(Z, 0)
-
-
-def softmax(Z):
-    A = np.exp(Z) / sum(np.exp(Z))
-    return A
 
 
 def sigmoid(s):
@@ -58,18 +46,9 @@ def deriv_relu(Z):
     return (Z > 0) * 1
 
 
-# def deriv_softmax(Z):
-#     dZ = np.exp(Z) / sum(np.exp(Z)) * (1. - np.exp(Z) / sum(np.exp(Z)))
-#     return dZ
-
 def softmax(Z):
     f = torch.exp(Z - torch.max(Z))
     return f / torch.sum(f)
-
-    # numerator = torch.exp(Z)
-    # denominator = sum(torch.exp(Z))
-    # A = torch.exp(Z) / sum(torch.exp(Z))
-    # return A
 
 
 def softmax_torch(x):  # Assuming x has atleast 2 dimensions
@@ -79,29 +58,6 @@ def softmax_torch(x):  # Assuming x has atleast 2 dimensions
     probs = x_exp / x_exp_sum
     return probs
 
-
-#
-# class CrossEntropyLossManual:
-#     """
-#     y0 is the vector with shape (batch_size,C)
-#     x shape is the same (batch_size), whose entries are integers from 0 to C-1
-#     """
-#
-#     def __init__(self, ignore_index=-100) -> None:
-#         self.ignore_index = ignore_index
-#
-#     def __call__(self, y0, x):
-#         loss = 0.
-#         n_batch, n_class = y0.shape
-#         # print(n_class)
-#         for y1, x1 in zip(y0, x):
-#             class_index = int(x1.item())
-#             if class_index == self.ignore_index:
-#                 n_batch -= 1
-#                 continue
-#             loss = loss + torch.log(torch.exp(y1[class_index]) / (torch.exp(y1).sum()))
-#         loss = - loss / n_batch
-#         return loss
 
 def cross_entropy(activations, labels):
     return - torch.log(activations[range(labels.shape[0]), labels]).mean()
