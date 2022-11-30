@@ -1,6 +1,9 @@
 import torch
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
+
+from mor_main import mor_main
+
 from matplotlib import pyplot as plt
 import math
 
@@ -160,4 +163,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    mor_main()
+    # main()
