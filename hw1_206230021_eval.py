@@ -1,8 +1,9 @@
+import pickle
 import torch
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
-import numpy as np
-from matplotlib import pyplot as plt
+
+from hw1_206230021_train import nn_predict
 
 # --- Hyper-parameters (constants) ---
 
@@ -43,5 +44,15 @@ def evaluate_hw1():
     :return:
     """
 
+    # Fetching MNIST test data
     MNIST_test_data, MNIST_test_loader = fetch_MNIST_test()
-    nn = torch.load('nn_weights.pkl')
+
+    # Loading the pretrained model
+    nn = pickle.load(open("q1_model.pkl", "rb"))
+
+    # Testing the NN
+    test_accuracy = nn_predict(nn, MNIST_test_loader)
+    print(f"Accuracy on the test set: {test_accuracy}%")
+
+
+evaluate_hw1()
