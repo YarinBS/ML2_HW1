@@ -54,6 +54,7 @@ def evaluate_hw1():
     # Testing the NN
     test_accuracy = nn_predict(nn, MNIST_test_loader)
     print(f"Accuracy on the test set: {test_accuracy}%")
+    return test_accuracy
 
 
 evaluate_hw1()
