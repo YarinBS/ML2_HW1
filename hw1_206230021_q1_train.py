@@ -103,7 +103,7 @@ def plot_convergence(data: list, mode: str):
 
 # --- Fetching MNIST data ---
 
-def fetch_MNIST():
+def fetch_MNIST_train():
     # Transform the image data into Tensor
     transform = transforms.Compose([
         transforms.ToTensor(),
@@ -133,7 +133,7 @@ def fetch_MNIST():
 
 
 def main():
-    MNIST_train_data, MNIST_train_loader, MNIST_test_data, MNIST_test_loader = fetch_MNIST()
+    MNIST_train_data, MNIST_train_loader, MNIST_test_data, MNIST_test_loader = fetch_MNIST_train()
 
     # Instantiating a Neural Network
     nn = NeuralNetwork(input_size=28 * 28,
@@ -157,18 +157,18 @@ def main():
     plot_convergence(train_accuracies, mode='train')
     plot_convergence(test_accuracies, mode='test')
 
-    # Saving the trained model
+    # Saving the trained model and the weights
     with open("q1_model.pkl", "wb") as f:
         pickle.dump(nn, f)
-    # torch.save({'w1': nn.W1, 'b1': nn.b1, 'w2': nn.W2, 'b2': nn.b2}, 'nn_weights.pkl')
+    torch.save({'w1': nn.W1, 'b1': nn.b1, 'w2': nn.W2, 'b2': nn.b2}, 'nn_weights.pkl')
 
     # Testing the NN on the train set
     train_accuracy = nn_predict(nn, MNIST_train_loader)
     print(f"Accuracy on the train set: {train_accuracy}%")
 
     # Testing the NN on the test set
-    test_accuracy = nn_predict(nn, MNIST_test_loader)
-    print(f"Accuracy on the test set: {test_accuracy}%")
+    # test_accuracy = nn_predict(nn, MNIST_test_loader)
+    # print(f"Accuracy on the test set: {test_accuracy}%")
 
 
 if __name__ == '__main__':

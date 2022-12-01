@@ -3,7 +3,7 @@ import torch
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
-from hw1_206230021_train import nn_predict
+from hw1_206230021_q1_train import nn_predict, NeuralNetwork
 
 # --- Hyper-parameters (constants) ---
 
@@ -48,6 +48,7 @@ def evaluate_hw1():
     MNIST_test_data, MNIST_test_loader = fetch_MNIST_test()
 
     # Loading the pretrained model
+    nn = NeuralNetwork
     nn = pickle.load(open("q1_model.pkl", "rb"))
 
     # Testing the NN
