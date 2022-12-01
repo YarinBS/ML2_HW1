@@ -48,7 +48,6 @@ def evaluate_hw1():
     MNIST_test_data, MNIST_test_loader = fetch_MNIST_test()
 
     # Loading the pretrained model
-    nn = NeuralNetwork
     nn = pickle.load(open("q1_model.pkl", "rb"))
 
     # Testing the NN
