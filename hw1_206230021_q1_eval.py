@@ -56,4 +56,9 @@ def evaluate_hw1():
     return test_accuracy
 
 
-evaluate_hw1()
+def main():
+    evaluate_hw1()
+
+
+if __name__ == '__main__':
+    main()

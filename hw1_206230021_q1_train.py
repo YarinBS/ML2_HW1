@@ -87,9 +87,16 @@ def nn_predict(net: NeuralNetwork, loader):
     return 100 * (correct_predictions / total_predictions)
 
 
+# --- One-hot vectorizing ---
+def one_hot(Y, n):
+    Y_one_hot = torch.zeros((Y.shape[0], n))
+    Y_one_hot[torch.arange(Y.shape[0]), Y.long()] = 1
+    return Y_one_hot
+
+
 # --- Convergence plot ---
 
-def plot_convergence(data: list, mode: str):
+def plot_accuracy_convergence(data: list, mode: str):
     lst = [(elem1, elem2) for elem1, elem2 in data]  # Used to separate the x and y values from the data
     plt.plot(*zip(*lst))
     plt.xlabel('Epochs')
@@ -97,7 +104,7 @@ def plot_convergence(data: list, mode: str):
     plt.title(f'Accuracy over epochs')
     plt.savefig(f'{mode}_accuracy_over_time.png')
     if mode == 'test':
-        plt.legend(['Train', 'Test'])
+        plt.legend()
         plt.show()
 
 
@@ -143,9 +150,10 @@ def main():
     # Training the NN
     train_accuracies, test_accuracies = [], []
     for epoch in range(1, EPOCHS + 1):
-        print(f"Epoch {epoch}...")
+        # print(f"Epoch {epoch}...")
         for i, (train_images, train_labels) in enumerate(MNIST_train_loader):
-            train_labels = torch.nn.functional.one_hot(train_labels.long(), 10)
+            # train_labels = torch.nn.functional.one_hot(train_labels.long(), 10)
+            train_labels = one_hot(train_labels.long(), 10)
             train_images = train_images.view(-1, 28 * 28)
             nn.train(train_images, train_labels)
 
@@ -154,21 +162,17 @@ def main():
         test_accuracies.append((epoch, nn_predict(nn, MNIST_test_loader)))
 
     # Plotting the convergences
-    plot_convergence(train_accuracies, mode='train')
-    plot_convergence(test_accuracies, mode='test')
+    plot_accuracy_convergence(train_accuracies, mode='train')
+    plot_accuracy_convergence(test_accuracies, mode='test')
 
     # Saving the trained model and the weights
     with open("q1_model.pkl", "wb") as f:
         pickle.dump(nn, f)
-    torch.save({'w1': nn.W1, 'b1': nn.b1, 'w2': nn.W2, 'b2': nn.b2}, 'nn_weights.pkl')
+    torch.save({'w1': nn.W1, 'b1': nn.b1, 'w2': nn.W2, 'b2': nn.b2}, 'q1_weights.pkl')
 
     # Testing the NN on the train set
     train_accuracy = nn_predict(nn, MNIST_train_loader)
     print(f"Accuracy on the train set: {train_accuracy}%")
-
-    # Testing the NN on the test set
-    # test_accuracy = nn_predict(nn, MNIST_test_loader)
-    # print(f"Accuracy on the test set: {test_accuracy}%")
 
 
 if __name__ == '__main__':
